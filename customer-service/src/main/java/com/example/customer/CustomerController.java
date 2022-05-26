@@ -1,24 +1,27 @@
 package com.example.customer;
 
-import com.example.customer.CustomerRepository;
-import com.example.customer.Customer;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/people")
+@RequestMapping("/customers")
 @RequiredArgsConstructor
 public class CustomerController {
 
-    final CustomerRepository personRepository;
+    final CustomerRepository customerRepository;
 
     @GetMapping
-    public Flux<Customer> people() {
-        return personRepository.findAll();
+    public Flux<Customer> customer() {
+        return customerRepository.findAll();
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<Customer> createCustomer(@RequestBody Customer customer) {
+        return customerRepository.save(customer);
+    }
 
 }
